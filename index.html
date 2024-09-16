@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<!--Author: Muhamad Rasya Class : XII RPL
+        Github: RForRasya -->
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMK AL-ASIYAH school</title>
+    <link rel="icon" type="image/png" href="alas.png" sizes="32x32">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.7.1/dist/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-light: #f0f3f6;
+            --text-light: #333;
+            --text-dark: #f0f3f6;
+            --background-dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        .neumorphic {
+            background: var(--background-light);
+            box-shadow: 20px 20px 60px #d1d9e6, -20px -20px 60px #ffffff;
+            border-radius: 50px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .neumorphic {
+            background: var(--background-dark);
+            box-shadow: 20px 20px 60px #1e2a36, -20px -20px 60px #3a526a;
+        }
+
+        .neumorphic:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-3d {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .jurusan-card {
+            perspective: 1000px;
+        }
+
+        .jurusan-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .jurusan-card:hover .jurusan-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .jurusan-card-front, .jurusan-card-back {
+            backface-visibility: hidden;
+        }
+
+        .jurusan-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <canvas id="hero-canvas"></canvas>
+    
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <div>
+                        <a href="#" class="flex items-center py-4 px-2">
+                            <span class="font-semibold text-gray-500 text-lg">SMK AL-ASIYAH</span>
+                        </a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-1">
+                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Beranda</a>
+                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Tentang</a>
+                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Jurusan</a>
+                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Ekstrakulikuler</a>
+                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Fasilitas</a>
+                        <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Pendaftaran</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button id="darkModeToggle" class="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center text-center text-white">
+        <div class="z-10">
+            <h1 class="text-5xl font-bold mb-4">SMK AL-ASIYAH</h1>
+            <p class="text-xl mb-8">Unggul, Profesional, Terdepan dan Berkarakter</p>
+            <a href="#" class="btn-3d">Daftar Sekarang</a>
+        </div>
+    </section>
+
+    <!-- Tentang Sekolah -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Tentang AL-ASIYAH</h2>
+            <div class="neumorphic">
+                <p class="text-lg mb-6">Sekolah SMK AL-ASIYAH adalah lembaga pendidikan yang berfokus pada pengembangan keterampilan teknologi dan kewirausahaan. Kami berkomitmen untuk mempersiapkan siswa menghadapi tantangan di era digital dengan kurikulum yang inovatif dan fasilitas modern.</p>
+                <h3 class="text-2xl font-semibold mb-4">Visi</h3>
+                <p class="mb-6">Sebagai Sekolah Kejuruan Terdepan Dalam Penyiapan Sumberdaya Manusia Yang Menguasai Teknologi Informatika Serta Berakhlak Mulia Dengan Mengintegarsikan Sains, Teknologi, dan Nilai Ke Islaman.</p>
+                <h3 class="text-2xl font-semibold mb-4">Misi</h3>
+                <ul class="list-disc list-inside">
+                    <li>Menyelenggarakan Pengajaran Dan Pendidikan Teknologi Informatika, Baik Yang Bersifat Teoritis Maupun Praktisi</li>
+                    <li>Melakukan Penelitian Guna Memperkaya Wawasan Dan Pengetahuan Siswa Di Bidang Teknologi Informatika</li>
+                    <li>Melakukan Kerjasama Yang Produktif Dengan Lembaga Dan Perusahaan Terkait</li>
+                    <li>Memberikan Landasn Moral Terhadap Pengembangan Dan Penggunaan Ilmu Pengetahuan Dan Teknologi</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jurusan -->
+    <section class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Jurusan</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="jurusan-card">
+                    <div class="jurusan-card-inner neumorphic h-full">
+                        <div class="jurusan-card-front">
+                            <h3 class="text-2xl font-semibold mb-4">TKJ</h3>
+                            <p>Teknik Komputer dan Jaringan</p>
+                        </div>
+                        <div class="jurusan-card-back">
+                            <p>Fokus pada instalasi dan manajemen jaringan komputer serta troubleshooting hardware.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="jurusan-card">
+                    <div class="jurusan-card-inner neumorphic h-full">
+                        <div class="jurusan-card-front">
+                            <h3 class="text-2xl font-semibold mb-4">MM</h3>
+                            <p>Multimedia</p>
+                        </div>
+                        <div class="jurusan-card-back">
+                            <p>Mempelajari desain grafis, animasi, video editing, dan pengembangan konten digital.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="jurusan-card">
+                    <div class="jurusan-card-inner neumorphic h-full">
+                        <div class="jurusan-card-front">
+                            <h3 class="text-2xl font-semibold mb-4">RPL</h3>
+                            <p>Rekayasa Perangkat Lunak</p>
+                        </div>
+                        <div class="jurusan-card-back">
+                            <p>Berfokus pada pengembangan aplikasi, pemrograman, dan manajemen proyek software.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="jurusan-card">
+                    <div class="jurusan-card-inner neumorphic h-full">
+                        <div class="jurusan-card-front">
+                            <h3 class="text-2xl font-semibold mb-4">PBS</h3>
+                            <p>Perbankan Syariah</p>
+                        </div>
+                        <div class="jurusan-card-back">
+                            <p>Mempelajari sistem keuangan dan perbankan berbasis prinsip syariah.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ekstrakulikuler -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Contoh Ekstrakulikuler</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="neumorphic">
+                    <h3 class="text-2xl font-semibold mb-4">Hadroh</h3>
+                    <p>Dengan melatih cara memukul alat hadro ita bisa mengiringi sholawat setiap ada maulid maupun pengajian.</p>
+                </div>
+                <div class="neumorphic">
+                    <h3 class="text-2xl font-semibold mb-4">English Club</h3>
+                    <p>Di EC (English Club) ini kita bisa mengasah kemampuan skill bahasa inggris kita melalui guru bahasa nggris yang sangat handal.</p>
+                </div>
+                <div class="neumorphic">
+                    <h3 class="text-2xl font-semibold mb-4">Maintenance</h3>
+                    <p>Mempelajari teknik-teknik untuk mengamankan sistem dan jaringan komputer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prakerin -->
+    <section class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Prakerin</h2>
+            <div class="neumorphic">
+                <p class="text-lg mb-6">Program Praktik Kerja Industri (Prakerin) di AL-ASIYAH memberikan kesempatan kepada siswa untuk mendapatkan pengalaman kerja nyata di perusahaan-perusahaan terkemuka.</p>
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h4 class="text-xl font-semibold mb-2">Durasi</h4>
+                        <p>2 bulan</p>
+                    </div>
+                    <div class="mb-4 md:mb-0">
+                        <h4 class="text-xl font-semibold mb-2">Periode</h4>
+                        <p>Semester 2</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-2">Mitra Industri</h4>
+                        <ul class="list-disc list-inside">
+                            <li>Indotransdata</li>
+                            <li>Bank</li>
+                            <li>Radar Depok/Bogor</li>
+                            <li>Balai kota depok</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fasilitas -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Fasilitas Sekolah</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="neumorphic">
+                    <img src="komputer.png" alt="Laboratorium Komputer" class="w-full h-48 object-cover rounded-t-lg">
+                    <h3 class="text-2xl font-semibold my-4">Laboratorium Komputer</h3>
+                    <p>Dilengkapi dengan perangkat keras dan lunak terbaru untuk mendukung pembelajaran.</p>
+                </div>
+                <div class="neumorphic">
+                    <img src="studio.png" alt="Studio Multimedia" class="w-full h-48 object-cover rounded-t-lg">
+                    <h3 class="text-2xl font-semibold my-4">Studio</h3>
+                    <p>Studio tempat untuk membahas acara, podcast dan rapat-rapat.</p>
+                </div>
+                <div class="neumorphic">
+                    <img src="acara.png" alt="Perpustakaan Digital" class="w-full h-48 object-cover rounded-t-lg">
+                    <h3 class="text-2xl font-semibold my-4">Acara</h3>
+                    <p>Acara yang diselenggarakan oleh anggota OSIS/MPK pada setiap program kerjanya dibantu dengan dana sekolah.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pendaftaran Online -->
+    <section class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Pendaftaran Online</h2>
+            <div class="neumorphic">
+                <form class="space-y-6">
+                    <div>
+                        <label for="nama" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" id="nama" name="nama" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label for="jurusan" class="block text-sm font-medium text-gray-700">Jurusan yang Diminati</label>
+                        <select id="jurusan" name="jurusan" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                            <option value="">Pilih Jurusan</option>
+                            <option value="TKJ">Teknik Komputer dan Jaringan</option>
+                            <option value="MM">Multimedia</option>
+                            <option value="RPL">Rekayasa Perangkat Lunak</option>
+                            <option value="PBS">Perbankan Syariah</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn-3d">Daftar Sekarang</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-2xl font-semibold mb-4">SMK AL-ASIYAH</h3>
+                    <p>Unggul, Profesional, Terdepan dan Berkarakter</p>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h4 class="text-xl font-semibold mb-4">Kontak</h4>
+                    <p>Pabuaran, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16916</p>
+                    <p>Telp: +62 87904438</p>
+                    <p>Email: samsul_smktialasiyah@yahoo.com</p>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h4 class="text-xl font-semibold mb-4">Ikuti Kami</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-green-500"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white hover:text-green-500"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white hover:text-green-500"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-green-500"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <p>&copy; 2024 SMK AL-ASIYAH by : Muhamad Rasya, Class : XII RPL. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const icon = darkModeToggle.querySelector('i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        });
+
+        // 3D Hero Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('hero-canvas'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+        const material = new THREE.MeshBasicMaterial({ color: 0x3498db, wireframe: true });
+        const torusKnot = new THREE.Mesh(geometry, material);
+        scene.add(torusKnot);
+
+        camera.position.z = 30;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            torusKnot.rotation.x += 0.01;
+            torusKnot.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Scroll animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.utils.toArray('.neumorphic').forEach((el, index) => {
+            gsap.from(el, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 80%',
+                    end: 'bottom 20%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
